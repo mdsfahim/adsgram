@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Earn App</title>
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://js.adsgram.ai/effect.js"></script>
+
+    <style>
+        :root {
+            /* Map Telegram Theme Variables */
+            --bg-color: var(--tg-theme-bg-color, #181818);
+            --text-color: var(--tg-theme-text-color, #ffffff);
+            --hint-color: var(--tg-theme-hint-color, #999999);
+            --button-color: var(--tg-theme-button-color, #2481cc);
+            --button-text-color: var(--tg-theme-button-text-color, #ffffff);
+            --secondary-bg: var(--tg-theme-secondary-bg-color, #2c2c2c);
+            --header-bg: var(--tg-theme-header-bg-color, #242424);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Prevent scroll on body, scroll sections instead */
+        }
+
+        /* --- Header --- */
+        .top-bar {
+            background-color: var(--header-bg);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .coin-balance {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #FFD700; /* Gold color */
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* --- Main Content Area --- */
+        .content-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .section {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Cards & UI Elements --- */
+        .card {
+            background-color: var(--secondary-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        h1 { font-size: 1.8rem; margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; margin-bottom: 15px; }
+        p { color: var(--hint-color); margin-bottom: 15px; line-height: 1.5; }
+
+        .btn {
+            background-color: var(--button-color);
+            color: var(--button-text-color);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+
+        .btn:active { opacity: 0.8; transform: scale(0.98); }
+
+        /* --- Profile Styles --- */
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #444;
+            margin: 0 auto 15px auto;
+            background-size: cover;
+            background-position: center;
+            border: 3px solid var(--button-color);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .info-row:last-child { border-bottom: none; }
+        
+        /* --- Bottom Navigation --- */
+        .bottom-nav {
+            background-color: var(--secondary-bg);
+            padding: 10px 0;
+            padding-bottom: max(10px, env(safe-area-inset-bottom));
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--hint-color);
+            cursor: pointer;
+            gap: 5px;
+            width: 60px;
+        }
+
+        .nav-item svg { width: 24px; height: 24px; fill: currentColor; }
+        
+        .nav-item.active { color: var(--button-color); }
+
+        /* --- Loader / Status --- */
+        #status-msg {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <span>App Name</span>
+        <div class="coin-balance">
+            <span>💰</span> <span id="header-balance">0</span>
+        </div>
+    </div>
+
+    <div id="status-msg"></div>
+
+    <div class="content-container">
+        
+        <div id="section-home" class="section active">
+            <div class="card">
+                <h1>Welcome, <span id="user-first-name">User</span>! 👋</h1>
+                <p>Welcome to the official earning app. Watch ads to earn coins and track your progress right here in Telegram.</p>
+            </div>
+
+            <div class="card">
+                <h2>Total Earnings</h2>
+                <div style="font-size: 2.5rem; font-weight: bold; color: #FFD700; margin: 10px 0;">
+                    <span id="home-balance">0</span> 🪙
+                </div>
+                <p>Coins accumulated</p>
+            </div>
+        </div>
+
+        <div id="section-earn" class="section">
+            <div class="card">
+                <h2>Watch & Earn</h2>
+                <p>Watch a short video ad from our partners (Adsgram) to earn instant rewards.</p>
+                <div style="background: rgba(255,215,0,0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px dashed #FFD700;">
+                    <strong>Reward:</strong> +5 Coins per ad
+                </div>
+                <button class="btn" onclick="showAd()">▶ Watch Ad</button>
+            </div>
+        </div>
+
+        <div id="section-profile" class="section">
+            <div class="card">
+                <div id="profile-pic" class="profile-pic"></div>
+                <h2 id="profile-name">Loading...</h2>
+                <p id="profile-username">@username</p>
+            </div>
+
+            <div class="card" style="text-align: left;">
+                <div class="info-row">
+                    <span>User ID</span>
+                    <span id="profile-id" style="color: var(--text-color);">...</span>
+                </div>
+                <div class="info-row">
+                    <span>Platform</span>
+                    <span id="profile-platform">Telegram</span>
+                </div>
+                <div class="info-row">
+                    <span>Language</span>
+                    <span id="profile-lang">en</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('home')">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('earn')">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.15-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.47.33 2.65 1.17 2.88 2.9h-1.96c-.15-.96-.77-1.49-2.07-1.49-1.37 0-2.09.7-2.09 1.48 0 .83.6 1.48 2.67 1.95 2.54.58 4.18 1.63 4.18 3.73 0 1.8-1.37 2.89-3.07 3.22z"/></svg>
+            <span>Earn</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('profile')">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span>Profile</span>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // CONFIGURATION
+        // ==========================================
+        const ADSGRAM_BLOCK_ID = "int-22896"; // <--- REPLACE THIS WITH YOUR ID
+        // ==========================================
+
+        const tg = window.Telegram.WebApp;
+        let currentBalance = 0;
+
+        // Initialize App
+        function initApp() {
+            tg.ready();
+            tg.expand(); // Make app full screen
+
+            // Check if running in Telegram or Browser (Mock Mode)
+            const user = tg.initDataUnsafe.user || {
+                first_name: "Test",
+                last_name: "User",
+                username: "testuser",
+                id: 123456,
+                photo_url: ""
+            };
+
+            // Set User Data in UI
+            document.getElementById('user-first-name').innerText = user.first_name;
+            document.getElementById('profile-name').innerText = user.first_name + " " + (user.last_name || "");
+            document.getElementById('profile-username').innerText = user.username ? "@" + user.username : "No Username";
+            document.getElementById('profile-id').innerText = user.id;
+            document.getElementById('profile-platform').innerText = tg.platform || "Web";
+            document.getElementById('profile-lang').innerText = user.language_code || "en";
+
+            // Profile Picture Handling
+            const picEl = document.getElementById('profile-pic');
+            if (user.photo_url) {
+                picEl.style.backgroundImage = `url('${user.photo_url}')`;
+            } else {
+                picEl.innerHTML = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:2rem;">👤</div>`;
+            }
+
+            // Load Balance from CloudStorage
+            loadBalance();
+        }
+
+        // --- Navigation Logic ---
+        function switchTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            // Show target section
+            document.getElementById(`section-${tabName}`).classList.add('active');
+            
+            // Update Navigation Icons
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            // This is a simple index match; for robust apps, match by data attribute
+            const index = tabName === 'home' ? 0 : tabName === 'earn' ? 1 : 2;
+            document.querySelectorAll('.nav-item')[index].classList.add('active');
+
+            // Haptic Feedback
+            if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+        }
+
+        // --- Data Logic (CloudStorage) ---
+        function loadBalance() {
+            console.log("Loading balance...");
+            // If in Telegram
+            if (tg.CloudStorage) {
+                tg.CloudStorage.getItem('user_coins', (err, value) => {
+                    if (err) {
+                        console.error('CloudStorage Error:', err);
+                        showToast("Error loading data");
+                    } else {
+                        currentBalance = value ? parseInt(value) : 0;
+                        updateBalanceUI();
+                    }
+                });
+            } else {
+                // Fallback for browser testing
+                currentBalance = parseInt(localStorage.getItem('user_coins')) || 0;
+                updateBalanceUI();
+            }
+        }
+
+        function saveBalance() {
+            if (tg.CloudStorage) {
+                tg.CloudStorage.setItem('user_coins', currentBalance.toString(), (err, stored) => {
+                    if (err) console.error('Error saving balance:', err);
+                    else console.log('Balance saved to CloudStorage');
+                });
+            } else {
+                localStorage.setItem('user_coins', currentBalance);
+            }
+        }
+
+        function updateBalanceUI() {
+            // Animate number (simple version)
+            document.getElementById('header-balance').innerText = currentBalance;
+            document.getElementById('home-balance').innerText = currentBalance;
+        }
+
+        function showToast(msg) {
+            const el = document.getElementById('status-msg');
+            el.innerText = msg;
+            el.style.opacity = '1';
+            setTimeout(() => { el.style.opacity = '0'; }, 3000);
+        }
+
+        // --- Adsgram Logic ---
+        function showAd() {
+            if (!window.Adsgram) {
+                showToast("Adsgram script not loaded");
+                return;
+            }
+
+            const AdController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
+
+            AdController.show().then((result) => {
+                // User watched the ad successfully
+                console.log('Reward granted:', result);
+                
+                // Add Coins
+                currentBalance += 5;
+                updateBalanceUI();
+                saveBalance();
+
+                // Success Feedback
+                showToast("✅ +5 Coins Earned!");
+                if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+
+            }).catch((result) => {
+                // Error or Skipped
+                console.log('Ad error/skip:', result);
+                
+                if (result.error) {
+                    showToast("❌ Error loading ad");
+                } else {
+                    showToast("⚠️ Ad skipped. No reward.");
+                }
+            });
+        }
+
+        // Run Init
+        initApp();
+
+    </script>
+</body>
+</html>
