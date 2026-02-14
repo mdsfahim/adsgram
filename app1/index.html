@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdVault – Earn by watching ads</title>
+    <!-- Telegram Web App library -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Adsgram library -->
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5f7fe 0%, #e9eefa 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .app-container {
+            max-width: 400px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 10, 30, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            overflow: hidden;
+            padding: 24px 20px 20px;
+        }
+
+        /* User header */
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 60px;
+            padding: 8px 16px 8px 8px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .user-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 56px;
+            background: linear-gradient(135deg, #2A5C8F, #4A9FCF);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 24px;
+            box-shadow: 0 6px 12px rgba(42, 92, 143, 0.2);
+            border: 2px solid white;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 18px;
+            color: #1a2639;
+            line-height: 1.3;
+        }
+
+        .user-username {
+            font-size: 14px;
+            color: #4a5568;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .balance-badge {
+            background: linear-gradient(135deg, #1E2F4A, #2C3E5A);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            white-space: nowrap;
+        }
+
+        /* Tabs navigation */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 40px;
+            padding: 6px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+
+        .tab-button {
+            flex: 1;
+            text-align: center;
+            padding: 12px 6px;
+            border-radius: 34px;
+            font-weight: 600;
+            font-size: 16px;
+            color: #2d3a4f;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-button.active {
+            background: white;
+            box-shadow: 0 6px 12px rgba(0, 20, 40, 0.12);
+            color: #1A2C42;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            animation: fade 0.2s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0.5; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card style */
+        .card {
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 24px 20px;
+            box-shadow: 0 10px 20px rgba(0,10,30,0.08);
+            border: 1px solid rgba(255,255,255,0.8);
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: flex;
+            gap: 16px;
+            justify-content: space-between;
+        }
+
+        .stat-item {
+            background: white;
+            border-radius: 24px;
+            padding: 16px;
+            flex: 1;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1E2F4A;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #5b687c;
+            margin-top: 4px;
+        }
+
+        .ad-button {
+            background: linear-gradient(145deg, #1E2F4A, #2C3E5A);
+            border: none;
+            color: white;
+            width: 100%;
+            padding: 18px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 12px 24px rgba(28, 45, 75, 0.25);
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .ad-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 6px 12px rgba(28, 45, 75, 0.3);
+        }
+
+        .profile-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .profile-label {
+            font-weight: 600;
+            color: #2d3a4f;
+            min-width: 100px;
+        }
+
+        .profile-value {
+            color: #1a2639;
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        .footnote {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #6f7d95;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container" id="app">
+    <!-- Dynamic user header -->
+    <div class="user-header" id="userHeader">
+        <div class="user-avatar" id="userAvatar"></div>
+        <div class="user-info">
+            <div class="user-name" id="userName">Loading...</div>
+            <div class="user-username" id="userUsername">@...</div>
+        </div>
+        <div class="balance-badge" id="balanceDisplay">$0.00</div>
+    </div>
+
+    <!-- Tab navigation -->
+    <div class="tabs">
+        <button class="tab-button active" data-tab="home">Home</button>
+        <button class="tab-button" data-tab="earn">Earn</button>
+        <button class="tab-button" data-tab="profile">Profile</button>
+    </div>
+
+    <!-- Home Section -->
+    <div id="homeSection" class="section active">
+        <div class="card">
+            <h3 style="margin-bottom: 20px; font-size: 20px; color: #1E2F4A;">Welcome back!</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalEarned">$0.00</div>
+                    <div class="stat-label">Total earned</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="adsWatched">0</div>
+                    <div class="stat-label">Ads watched</div>
+                </div>
+            </div>
+            <p style="margin-top: 20px; color: #3f4e67;">Watch rewarded ads and earn instantly. Go to the Earn tab to start.</p>
+        </div>
+    </div>
+
+    <!-- Earn Section -->
+    <div id="earnSection" class="section">
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 16px;">🎥</div>
+            <h3 style="margin-bottom: 12px;">Watch a short ad</h3>
+            <p style="color: #4a5b74; margin-bottom: 24px;">Earn $0.05 per ad. No limit for now.</p>
+            <button class="ad-button" id="showAdButton">
+                <span>▶</span> Watch Ad & Earn
+            </button>
+            <p style="margin-top: 16px; font-size: 14px; color: #75869c;">Ads are served by Adsgram.</p>
+        </div>
+        <!-- Optional: recent activity placeholder -->
+        <div class="card" style="padding: 16px;">
+            <h4 style="margin-bottom: 8px;">Last earnings</h4>
+            <div id="recentEarnings">— No activity yet</div>
+        </div>
+    </div>
+
+    <!-- Profile Section -->
+    <div id="profileSection" class="section">
+        <div class="card">
+            <div class="profile-row">
+                <span class="profile-label">Name</span>
+                <span class="profile-value" id="profileName">—</span>
+            </div>
+            <div class="profile-row">
+                <span class="profile-label">Username</span>
+                <span class="profile-value" id="profileUsername">—</span>
+            </div>
+            <div class="profile-row">
+                <span class="profile-label">User ID</span>
+                <span class="profile-value" id="profileId">—</span>
+            </div>
+            <div class="profile-row">
+                <span class="profile-label">Total earned</span>
+                <span class="profile-value" id="profileTotal">$0.00</span>
+            </div>
+            <div class="profile-row">
+                <span class="profile-label">Ads watched</span>
+                <span class="profile-value" id="profileAds">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footnote">Secured by Adsgram • Telegram Mini App</div>
+</div>
+
+<script>
+    (function() {
+        // ---------- Configuration ----------
+        // ⚠️ REPLACE WITH YOUR ACTUAL ADSGRAM BLOCK ID
+        const ADSGRAM_BLOCK_ID = 'int-22948';
+
+        // Reward amount per ad (in dollars, or any unit)
+        const REWARD_PER_AD = 0.05;
+
+        // ---------- Global state ----------
+        let userData = {
+            balance: 0.0,
+            totalEarned: 0.0,
+            adsWatched: 0,
+            recentEarnings: []   // keep last 3 timestamps
+        };
+
+        // Load state from localStorage if exists
+        function loadState() {
+            try {
+                const saved = localStorage.getItem('advault_state');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    userData.balance = parsed.balance || 0;
+                    userData.totalEarned = parsed.totalEarned || 0;
+                    userData.adsWatched = parsed.adsWatched || 0;
+                    userData.recentEarnings = parsed.recentEarnings || [];
+                }
+            } catch (e) {
+                console.warn('Failed to load state', e);
+            }
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            try {
+                localStorage.setItem('advault_state', JSON.stringify({
+                    balance: userData.balance,
+                    totalEarned: userData.totalEarned,
+                    adsWatched: userData.adsWatched,
+                    recentEarnings: userData.recentEarnings
+                }));
+            } catch (e) {}
+        }
+
+        // ---------- Update UI with current state ----------
+        function updateUI() {
+            // Format currency (simple, assume dollars)
+            const balanceStr = '$' + userData.balance.toFixed(2);
+            const totalStr = '$' + userData.totalEarned.toFixed(2);
+
+            document.getElementById('balanceDisplay').innerText = balanceStr;
+            document.getElementById('totalEarned').innerText = totalStr;
+            document.getElementById('adsWatched').innerText = userData.adsWatched;
+            document.getElementById('profileTotal').innerText = totalStr;
+            document.getElementById('profileAds').innerText = userData.adsWatched;
+
+            // Update recent earnings in Earn tab
+            const recentDiv = document.getElementById('recentEarnings');
+            if (userData.recentEarnings.length === 0) {
+                recentDiv.innerText = '— No activity yet';
+            } else {
+                const items = userData.recentEarnings.map(ts => {
+                    const date = new Date(ts).toLocaleTimeString();
+                    return `+$${REWARD_PER_AD.toFixed(2)} at ${date}`;
+                }).join('<br>');
+                recentDiv.innerHTML = items;
+            }
+        }
+
+        // ---------- Reward function (called when ad completed) ----------
+        function onAdReward() {
+            userData.balance += REWARD_PER_AD;
+            userData.totalEarned += REWARD_PER_AD;
+            userData.adsWatched += 1;
+
+            // Store last 3 timestamps
+            userData.recentEarnings.unshift(Date.now());
+            if (userData.recentEarnings.length > 3) userData.recentEarnings.pop();
+
+            saveState();
+            updateUI();
+
+            // Optional: show a subtle in-app notification
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.showAlert(`+$${REWARD_PER_AD.toFixed(2)} earned!`);
+            } else {
+                alert(`+$${REWARD_PER_AD.toFixed(2)} earned!`);
+            }
+        }
+
+        function onAdError(result) {
+            console.warn('Ad error:', result);
+            let message = 'Ad could not be shown.';
+            if (result && result.description) message = result.description;
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.showAlert(message);
+            } else {
+                alert(message);
+            }
+        }
+
+        // ---------- Adsgram controller ----------
+        let adController = null;
+
+        function initAdsgram() {
+            if (typeof window.Adsgram !== 'undefined' && window.Adsgram.init) {
+                try {
+                    adController = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
+                    console.log('Adsgram initialized');
+                } catch (e) {
+                    console.error('Adsgram init error', e);
+                }
+            } else {
+                console.warn('Adsgram script not yet loaded');
+            }
+        }
+
+        // Call init when script is ready (it's already included, but ensure)
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            initAdsgram();
+        } else {
+            window.addEventListener('DOMContentLoaded', initAdsgram);
+        }
+
+        // Show ad button handler
+        document.getElementById('showAdButton').addEventListener('click', function() {
+            if (!adController) {
+                onAdError({ description: 'Ad service not ready. Please try again.' });
+                return;
+            }
+
+            adController.show()
+                .then(() => {
+                    // Ad watched successfully
+                    onAdReward();
+                })
+                .catch((error) => {
+                    onAdError(error);
+                });
+        });
+
+        // ---------- Telegram user detection ----------
+        function setUserInfo() {
+            let user = null;
+            // Check if we are inside Telegram
+            if (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
+                user = Telegram.WebApp.initDataUnsafe.user;
+            } else {
+                // Mock user for testing outside Telegram
+                user = {
+                    id: 123456789,
+                    first_name: 'Test',
+                    last_name: 'User',
+                    username: 'testuser',
+                    photo_url: ''  // no photo for mock
+                };
+                console.log('Using mock user (not in Telegram)');
+            }
+
+            // Fill user details
+            const fullName = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'Anonymous';
+            const username = user.username ? '@' + user.username : 'no username';
+            const userId = user.id || '—';
+
+            document.getElementById('userName').innerText = fullName;
+            document.getElementById('userUsername').innerText = username;
+            document.getElementById('profileName').innerText = fullName;
+            document.getElementById('profileUsername').innerText = username;
+            document.getElementById('profileId').innerText = userId;
+
+            // Avatar
+            const avatarDiv = document.getElementById('userAvatar');
+            if (user.photo_url) {
+                avatarDiv.innerHTML = `<img src="${user.photo_url}" alt="avatar">`;
+            } else {
+                // Initials
+                const initials = (user.first_name ? user.first_name[0] : '') + (user.last_name ? user.last_name[0] : '') || '?';
+                avatarDiv.innerText = initials.toUpperCase();
+            }
+        }
+
+        // ---------- Tab switching ----------
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab-button');
+            const sections = {
+                home: document.getElementById('homeSection'),
+                earn: document.getElementById('earnSection'),
+                profile: document.getElementById('profileSection')
+            };
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Update active tab button
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    // Show corresponding section
+                    const target = tab.getAttribute('data-tab');
+                    Object.values(sections).forEach(s => s.classList.remove('active'));
+                    if (sections[target]) sections[target].classList.add('active');
+                });
+            });
+        }
+
+        // ---------- Initialization ----------
+        function init() {
+            loadState();
+            setUserInfo();
+            updateUI();
+            setupTabs();
+
+            // Notify Telegram that the app is ready
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.ready();
+                Telegram.WebApp.expand(); // optionally expand to full height
+            }
+        }
+
+        // Run init when DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+</script>
+<!-- 
+    IMPORTANT: Replace "your-block-id" in the ADSGRAM_BLOCK_ID variable with your actual block ID from Adsgram.
+    Also ensure you have added your domain to the allowed list in Adsgram settings.
+-->
+</body>
+</html>
