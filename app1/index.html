@@ -102,24 +102,81 @@
       visibility: hidden;
     }
 
-    .fixed-bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 5rem;
-      z-index: 1000;
-      background: #ffffff;
-      padding: 1rem;
-      box-shadow: 0 -15px 30px rgba(0,0,0,0.1);
-      border-radius: 1rem 1rem 0 0;
-    }
+    /* ===================== NEW PILL NAV STYLES ===================== */
+.fixed-bottom-nav {
+  position: fixed;
+  bottom: 1.5rem; /* Lifts it up from the bottom */
+  left: 50%;
+  transform: translateX(-50%); /* Centers it perfectly */
+  width: 90%; /* Width relative to screen */
+  max-width: 400px; /* Prevents it from getting too wide on desktop */
+  height: auto;
+  z-index: 1000;
+  background: #ffffff;
+  padding: 0.5rem 0.5rem; /* Padding around the items */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* Stronger, floating shadow */
+  border-radius: 9999px; /* Makes the bar perfectly round (Pill shape) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease-in-out; /* Keeps your hide animation smooth */
+}
+
+.fixed-bottom-nav ul {
+  width: 100%;
+  display: flex;
+  justify-content: space-between; /* Spreads items evenly */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.nav-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #64748b; /* Gray for inactive items */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  
+  /* Crucial for the pill effect on the active item */
+  padding: 0.6rem 1.2rem; 
+  border-radius: 9999px; /* Rounds the individual item */
+  flex: 1; /* Ensures they share space equally */
+  margin: 0 2px; /* Tiny gap between items */
+}
+
+.nav-item i {
+  font-size: 1.25rem;
+  margin-bottom: 2px;
+  transition: transform 0.2s ease;
+}
+
+/* THE ACTIVE STATE (The Blue Pill) */
+.nav-item.active {
+  background-color: #E0F2FE; /* Light Blue Background */
+  color: #0284C7; /* Darker Blue Text/Icon */
+  font-weight: 700;
+  transform: none; /* Removes the old jump animation */
+}
+
+.nav-item.active i {
+  transform: scale(1.1); /* Slightly enlarge icon when active */
+}
+
+/* When header is hidden (scrolling), we hide this nav too */
+body.header-hidden .fixed-bottom-nav {
+  transform: translateX(-50%) translateY(0) !important;
+}
 
     /* Adjust main content when header is hidden */
     main {
       position: fixed;
       top: 6rem;
-      bottom: 5rem;
+      bottom: 0; /* Let main go to bottom of screen */
+   /* Add internal padding so content clears the floating bar */
       left: 0;
       right: 0;
       overflow: hidden;
@@ -128,8 +185,10 @@
     }
 
     body.header-hidden main {
-      top: 0;
-    }
+  top: 0;
+  padding-top: 0 !important; /* This removes the empty gap at the top */
+  padding-bottom: 0 !important; /* Resets bottom padding for our full-screen fix */
+}
 
     .sections-container {
       height: 100%;
@@ -139,29 +198,40 @@
     }
 
     .section {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 1rem;
-      display: none;
-      background: transparent;
-    }
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  /* UPDATED: Add lots of padding to the bottom */
+  padding: 1rem;
+  padding-bottom: 8rem !important; /* Space for the floating pill */
+  
+  display: none;
+  background: transparent;
+}
     .section.active {
       display: block;
     }
     
     /* Full Screen Section Override (For Profile and Withdraw) */
-    .section-fullscreen {
-        top: 0 !important; /* Changed from -6rem to 0 when header hidden */
-        padding-top: 1rem !important;
-        background: #f8fafc;
-        z-index: 1050;
-        height: 100%;
-    }
+   .section-fullscreen {
+    top: 0 !important;
+    
+    /* UPDATED: Uses "safe area" so it doesn't hide behind iPhone notch */
+    padding-top: max(1rem, env(safe-area-inset-top)) !important;
+    
+    /* Keeps the bottom space for your new floating nav */
+    padding-bottom: 8rem !important; 
+    
+    background: #f8fafc;
+    z-index: 1050;
+    height: 100%;
+    width: 100%; /* Ensure it fills width */
+}
 
     /* Adjust section-fullscreen when header is visible */
     body:not(.header-hidden) .section-fullscreen {
@@ -169,20 +239,7 @@
         height: calc(100% + 6rem);
     }
 
-    .nav-item {
-      transition: all 0.3s ease-in-out;
-      color: #64748b;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-    .nav-item.active {
-      color: var(--color-logo-green);
-      font-weight: 600;
-      transform: translateY(-4px);
-    }
+    
 
     .content-card {
       background-color: #ffffff;
@@ -1404,6 +1461,59 @@
     .ad-header { height: 60px; background: #1a1a1a; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid #333; }
     .close-ad-btn { background: rgba(255,255,255,0.1); border: 1px solid #555; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0.5; pointer-events: none; transition: 0.3s; }
     .close-ad-btn.active { background: #ef4444; border-color: #ef4444; opacity: 1; pointer-events: auto; box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
+    
+    /* ===================== NEW TRANSITION ANIMATIONS ===================== */
+
+/* 1. Keyframes for Section Transitions */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.98); /* Starts slightly smaller */
+  }
+  to {
+    opacity: 1;
+    transform: scale(1); /* Ends normal size */
+  }
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Starts 20px lower */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 2. Apply Animation to Standard Sections (Home, Earn) */
+.section.active {
+  display: block;
+  /* Runs a quick 0.3s animation whenever it becomes active */
+  animation: fadeInScale 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+/* 3. Apply Animation to Fullscreen Sections (Profile, Withdraw) */
+.section-fullscreen.active {
+  /* A slightly different "slide up" effect for overlay pages */
+  animation: slideUpFade 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+/* 4. Navigation Bar Icon Animations */
+.nav-item i {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* When active, the icon bounces up slightly */
+.nav-item.active i {
+  transform: translateY(-2px) scale(1.1);
+}
+
+/* Optional: Click "press" effect */
+.nav-item:active {
+  transform: scale(0.95);
+}
 </style>
 </head>
 <body class="flex flex-col min-h-screen" oncontextmenu="return false;">
@@ -2150,7 +2260,7 @@
   </main>
 
   <!-- Bottom Navigation -->
-  <nav class="fixed-bottom-nav p-3 rounded-t-3xl shadow-2xl">
+ <nav class="fixed-bottom-nav">
     <ul class="flex justify-around items-center h-full">
       <li class="nav-item flex flex-col items-center text-center text-xs font-medium active" data-target="home-section">
         <i class="fas fa-home text-xl mb-1"></i><span>Home</span>
@@ -3427,41 +3537,65 @@ let statusColor = (data.status === 'approved' || data.status === 'completed') ? 
     }
 
     function showSection(targetId) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    // 1. Remove active class from ALL sections
+    document.querySelectorAll('.section').forEach(s => {
+        s.classList.remove('active');
         
-        const targetSection = document.getElementById(targetId);
-        const targetNavItem = document.querySelector(`.nav-item[data-target="${targetId}"]`);
+        // TRICK: Reset animation so it replays next time
+        s.style.animation = 'none';
+        s.offsetHeight; /* trigger reflow */
+        s.style.animation = null; 
+    });
+
+    // 2. Remove active class from ALL nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // 3. Get Targets
+    const targetSection = document.getElementById(targetId);
+    const targetNavItem = document.querySelector(`.nav-item[data-target="${targetId}"]`);
+
+    // 4. Activate New Section
+    if (targetSection) {
+        targetSection.classList.add('active');
+        // IMPORTANT: Always scroll to top when switching
+        targetSection.scrollTop = 0;
+        window.scrollTo(0, 0);
+    }
+
+    // 5. Activate Nav Item with Animation
+    if (targetNavItem) {
+        targetNavItem.classList.add('active');
         
-        if (targetSection) targetSection.classList.add('active');
-        if (targetNavItem) targetNavItem.classList.add('active');
-        
-        // Show/hide header based on section
-        const hideHeaderSections = ['profile-section', 'withdraw-section', 'withdrawal-history-section'];
-        const showHeaderSections = ['home-section', 'earn-section'];
-        
-        if (hideHeaderSections.includes(targetId)) {
-            document.body.classList.add('header-hidden');
-        } else if (showHeaderSections.includes(targetId)) {
-            document.body.classList.remove('header-hidden');
-        }
-        
-        // If showing profile section, update the profile data
-        if (targetId === 'profile-section') {
-            updateUI();
-        }
-        
-        // If showing NEW withdraw section, update payment methods
-        if (targetId === 'withdraw-section') {
-            renderNewPaymentGrid();
-            updateNewFeeCalculation();
-        }
-        
-        // If showing history section, fetch history
-        if (targetId === 'withdrawal-history-section') {
-            fetchWithdrawalHistory();
+        // Optional: Add tiny vibration for mobile feel (Haptic Feedback)
+        if (navigator.vibrate) {
+            navigator.vibrate(5); // 5ms vibration
         }
     }
+
+    // 6. Handle Header Visibility (Same as before)
+    const hideHeaderSections = ['profile-section', 'withdraw-section', 'withdrawal-history-section'];
+    const showHeaderSections = ['home-section', 'earn-section'];
+
+    if (hideHeaderSections.includes(targetId)) {
+        document.body.classList.add('header-hidden');
+    } else if (showHeaderSections.includes(targetId)) {
+        document.body.classList.remove('header-hidden');
+    }
+    
+    // 7. Trigger Data Updates (Same as before)
+    if (targetId === 'profile-section') {
+        updateUI();
+    }
+    if (targetId === 'withdraw-section') {
+        renderNewPaymentGrid();
+        updateNewFeeCalculation();
+    }
+    if (targetId === 'withdrawal-history-section') {
+        fetchWithdrawalHistory();
+    }
+}
 
     
     async function detectCountry() {
