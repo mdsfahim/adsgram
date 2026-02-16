@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AdVault Earnings</title>
+  <title>Earnix Earnings</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -1628,7 +1628,7 @@
       </div>
     </div>
     <div class="text-gray-800 font-semibold text-lg flex items-center">
-      AdVault
+      Earnix
       <span id="country-flag" class="country-flag"></span>
     </div>
   </header>
@@ -1640,14 +1640,14 @@
       <div class="content-card mb-6 overflow-hidden">
         <div id="marqueeContainer" class="bg-yellow-50 p-4 rounded-t-2xl">
           <div id="marqueeText" class="text-sm font-semibold text-yellow-800">
-            🔔  AdVault $ Bot Made by Fahim  🔔 
+            🔔  Earnix $ Bot Made by Fahim  🔔 
           </div>
         </div>
-        <div class="banner-img">AdVault 💸 Earnings</div>
+        <div class="banner-img">Earnix 💸 Earnings</div>
       </div>
 
       <div class="content-card mb-6 text-center">
-        <h2 class="text-2xl font-bold text-gray-800 mb-2">Welcome to AdVault</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Welcome to Earnix</h2>
         <p class="text-gray-600 mb-6">Start maximizing your ad revenue today!</p>
         <button id="earnNowBtn" class="btn-primary py-3 px-8 w-full">
           <i class="fas fa-play-circle mr-2"></i> Start Earning
@@ -2075,7 +2075,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div class="p-3 bg-gray-50 rounded-lg">
               <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">App Name</div>
-              <div class="font-medium text-gray-800">AdVault Earnings</div>
+              <div class="font-medium text-gray-800">Earnix Earnings</div>
             </div>
             
              <div class="p-3 bg-gray-50 rounded-lg">
@@ -2226,7 +2226,7 @@
         
         // Added features
         paymentMethods: [], // [{id, name, type}]
-        marqueeSettings: { default: "Welcome to AdVault!" },
+        marqueeSettings: { default: "Welcome to Earnix!" },
         adServices: [],
         popunder: { code: '', active: false },
         socialBar: { code: '', active: false } // [{id, type, name, code, active, reward}]
@@ -2611,7 +2611,7 @@ function injectPassiveAds() {
     // ===================== ADDED FEATURES =====================
     
     function renderMarquee() {
-        const text = adminSettings.marqueeSettings[userCountry] || adminSettings.marqueeSettings['default'] || "Welcome to AdVault!";
+        const text = adminSettings.marqueeSettings[userCountry] || adminSettings.marqueeSettings['default'] || "Welcome to Earnix!";
         const marqueeElement = document.getElementById('marqueeText');
         if (marqueeElement) {
             marqueeElement.textContent = text;
