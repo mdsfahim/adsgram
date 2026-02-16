@@ -2181,8 +2181,8 @@
     const db = firebase.firestore();
     
     // Collection names
-    const USERS_COLLECTION = "adv2_users";
-    const WITHDRAWALS_COLLECTION = "adv2_withdrawals";
+    const USERS_COLLECTION = "earnix_users";
+    const WITHDRAWALS_COLLECTION = "earnix_withdrawals";
     const ADMIN_SETTINGS_DOC_ID = "_admin_settings_";
     
     // User data
@@ -3961,7 +3961,7 @@ function setupNotificationListener() {
     
     // Query: Get notifications newer than the user's last check
     // Limit(1) ensures we don't download everything, saving Firebase costs
-    const q = db.collection("adv2_notifications") // Ensure this collection exists in Firebase
+    const q = db.collection("earnix_notifications") // Ensure this collection exists in Firebase
         .where("createdAt", ">", lastCheck)
         .orderBy("createdAt", "desc")
         .limit(1);
@@ -3990,7 +3990,7 @@ async function openNotificationsModal() {
     listEl.innerHTML = '<div class="flex justify-center py-10"><div class="spinner border-gray-400"></div></div>';
 
     try {
-        const snapshot = await db.collection("adv2_notifications")
+        const snapshot = await db.collection("earnix_notifications")
             .orderBy("createdAt", "desc")
             .limit(20) // Load last 20 notifications
             .get();
@@ -4075,7 +4075,7 @@ function setupNotificationListener() {
     // Use 1970 (Date(0)) as fallback if user has no history
     const lastCheck = userData.lastNotificationCheck || new Date(0).toISOString();
     
-    const q = db.collection("adv2_notifications")
+    const q = db.collection("earnix_notifications")
         .where("createdAt", ">", lastCheck)
         .orderBy("createdAt", "desc")
         .limit(1);
