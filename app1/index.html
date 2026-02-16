@@ -1500,7 +1500,7 @@
                     <i class="fas fa-coins text-yellow-500"></i> Earning System
                 </div>
                 <div class="text-gray-600 text-sm leading-relaxed pl-6">
-                    Each task earns you <span id="instructionEarningsPerAd" class="font-bold text-gray-900">0.05</span> BDT. Complete daily tasks to maximize income.
+                    Each task earns you <span id="instructionEarningsPerAd" class="font-bold text-gray-900">0.05</span> Coin. Complete daily tasks to maximize income.
                 </div>
             </div>
 
@@ -1518,7 +1518,7 @@
                     <i class="fas fa-wallet text-purple-500"></i> Withdrawal
                 </div>
                 <div class="text-gray-600 text-sm leading-relaxed pl-6">
-                    Minimum withdrawal is <span id="instructionMinWithdrawal" class="font-bold text-gray-900">100</span> BDT. Setup payment info in Profile first.
+                    Minimum withdrawal is <span id="instructionMinWithdrawal" class="font-bold text-gray-900">100</span> Coin. Setup payment info in Profile first.
                 </div>
             </div>
 
@@ -1624,7 +1624,7 @@
       </div>
       <div class="flex flex-col">
         <span id="header-username" class="text-gray-800 text-base font-medium">@User</span>
-        <span id="header-balance" class="text-gray-600 text-sm opacity-90">BDT 0.00</span>
+        <span id="header-balance" class="text-gray-600 text-sm opacity-90">Coin 0.00</span>
       </div>
     </div>
     <div class="text-gray-800 font-semibold text-lg flex items-center">
@@ -1661,7 +1661,7 @@
               <i class="fas fa-dollar-sign text-2xl"></i>
             </div>
             <div>
-              <p class="text-3xl font-bold" id="home-earnings-val">BDT 0.00</p>
+              <p class="text-3xl font-bold" id="home-earnings-val">Coin 0.00</p>
               <p class="text-sm opacity-90">Total Earnings</p>
             </div>
           </div>
@@ -1699,7 +1699,7 @@
         <!-- Earnings per ad display -->
         <div class="text-center mb-4 p-2 bg-blue-50 rounded-lg">
           <p class="text-sm text-gray-700">
-            Earnings per ad: <span class="font-bold text-blue-700" id="earningsPerAdDisplay">0.05</span> BDT
+            Earnings per ad: <span class="font-bold text-blue-700" id="earningsPerAdDisplay">0.05</span> Coin
           </p>
           <p class="text-xs text-gray-500 mt-1">
             Each ad requires <span id="adDurationDisplay">15</span> seconds to complete
@@ -1765,15 +1765,15 @@
                 <i class="fas fa-wallet"></i> Available Balance
             </div>
             
-            <div class="balance-amount" id="new-withdraw-balance-display">BDT 0.00</div>
+            <div class="balance-amount" id="new-withdraw-balance-display">Coin 0.00</div>
             <div class="grid grid-cols-2 gap-4 text-sm">
                 <div>
                     <span class="block opacity-80">Total Earnings</span>
-                    <span class="font-bold" id="new-withdraw-total-earn">BDT 0.00</span>
+                    <span class="font-bold" id="new-withdraw-total-earn">Coin 0.00</span>
                 </div>
                 <div>
                     <span class="block opacity-80">Already Withdrawn</span>
-                    <span class="font-bold" id="new-withdraw-total-out">BDT 0.00</span>
+                    <span class="font-bold" id="new-withdraw-total-out">Coin 0.00</span>
                 </div>
             </div>
         </div>
@@ -1801,7 +1801,7 @@
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Withdrawal Amount</label>
                         <div class="relative mb-2">
-                            <span class="absolute left-4 top-1/2 transform -translate-y-1/2 font-bold text-gray-500">BDT</span>
+                            <span class="absolute left-4 top-1/2 transform -translate-y-1/2 font-bold text-gray-500">Coin</span>
                             <input type="number" id="new-amountInput" class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors" placeholder="0.00" min="100" step="0.01">
                         </div>
                         <div class="new-amount-options">
@@ -1820,7 +1820,7 @@
                         </div>
                         <div class="flex justify-between font-bold text-gray-800 pt-2 border-t border-gray-200">
                             <span>You Receive</span>
-                            <span class="text-blue-600" id="new-netAmountDisplay">BDT 0.00</span>
+                            <span class="text-blue-600" id="new-netAmountDisplay">Coin 0.00</span>
                         </div>
                     </div>
 
@@ -1975,7 +1975,7 @@
               <i class="fas fa-redo"></i>
             </button>
           </div>
-          <div class="text-3xl md:text-4xl font-bold mb-6" id="profileBalance">BDT 0.00</div>
+          <div class="text-3xl md:text-4xl font-bold mb-6" id="profileBalance">Coin 0.00</div>
           <div class="flex flex-col sm:flex-row gap-3">
             <button class="bg-white text-logo-blue font-semibold py-3 px-6 rounded-full flex items-center justify-center gap-2 hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200" onclick="showSection('withdraw-section')">
               <i class="fas fa-wallet"></i>
@@ -1997,7 +1997,7 @@
         <i class="fas fa-dollar-sign text-sm"></i>
       </div>
       <div class="flex-1">
-        <div class="text-sm font-semibold text-gray-800" id="profileEarnings">BDT 0.00</div>
+        <div class="text-sm font-semibold text-gray-800" id="profileEarnings">Coin 0.00</div>
         <div class="text-xs text-gray-500">Earnings</div>
       </div>
     </div>
@@ -2036,7 +2036,7 @@
         <i class="fas fa-money-check-alt text-sm"></i>
       </div>
       <div class="flex-1">
-        <div class="text-sm font-semibold text-gray-800" id="profileWithdrawn">BDT 0.00</div>
+        <div class="text-sm font-semibold text-gray-800" id="profileWithdrawn">Coin 0.00</div>
         <div class="text-xs text-gray-500">Withdrawn</div>
       </div>
     </div>
@@ -2451,7 +2451,7 @@ function injectPassiveAds() {
         
         if (document.getElementById('new-amountInput')) {
             document.getElementById('new-amountInput').min = adminSettings.minWithdrawal || 100;
-            document.getElementById('new-amountInput').placeholder = `Min ${adminSettings.minWithdrawal || 100} BDT`;
+            document.getElementById('new-amountInput').placeholder = `Min ${adminSettings.minWithdrawal || 100} Coin`;
         }
         
         // Update instructions popup
@@ -2594,7 +2594,7 @@ function injectPassiveAds() {
                 
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td class="font-medium">BDT ${data.amount?.toFixed(2) || '0.00'}</td>
+                    <td class="font-medium">Coin ${data.amount?.toFixed(2) || '0.00'}</td>
                     <td>${data.method || 'N/A'}</td>
                     <td><span class="${statusClass}">${data.status || 'pending'}</span></td>
                     <td class="text-gray-500 text-sm">${date}</td>
@@ -2806,8 +2806,8 @@ function injectPassiveAds() {
         const fee = amount * 0.02; // 2% fee
         const net = amount - fee;
 
-        document.getElementById('new-feeDisplay').innerText = `BDT ${fee.toFixed(2)}`;
-        document.getElementById('new-netAmountDisplay').innerText = `BDT ${Math.max(0, net).toFixed(2)}`;
+        document.getElementById('new-feeDisplay').innerText = `Coin ${fee.toFixed(2)}`;
+        document.getElementById('new-netAmountDisplay').innerText = `Coin ${Math.max(0, net).toFixed(2)}`;
     }
     
     function openNewPaymentEditModal() {
@@ -2867,7 +2867,7 @@ let statusColor = (data.status === 'approved' || data.status === 'completed') ? 
                     <tr class="border-b border-gray-100">
                         <td class="py-3 text-gray-600">${date}</td>
                         <td class="py-3 capitalize">${data.method}</td>
-                        <td class="py-3 font-medium">BDT ${data.amount}</td>
+                        <td class="py-3 font-medium">Coin ${data.amount}</td>
                         <td class="py-3 ${statusColor} text-xs font-bold uppercase">${data.status}</td>
                     </tr>
                 `;
@@ -3095,7 +3095,7 @@ let statusColor = (data.status === 'approved' || data.status === 'completed') ? 
                     totalEarnings: userData.totalEarnings
                 });
                 updateUI();
-                showSuccessPopup(`🎉 Verified! ${bonus.toFixed(2)} BDT Added!`);
+                showSuccessPopup(`🎉 Verified! ${bonus.toFixed(2)} Coin Added!`);
             } catch(e) {
                 console.error("Reward Save Error", e);
                 showTopNotification("Failed to save bonus reward");
@@ -3312,12 +3312,12 @@ let statusColor = (data.status === 'approved' || data.status === 'completed') ? 
         // Update header
         if (document.getElementById('header-username')) {
             document.getElementById('header-username').textContent = userData.username;
-            document.getElementById('header-balance').textContent = `BDT ${userData.balance.toFixed(2)}`;
+            document.getElementById('header-balance').textContent = `Coin ${userData.balance.toFixed(2)}`;
         }
 
         // Update home section
         if (document.getElementById('home-earnings-val')) {
-            document.getElementById('home-earnings-val').textContent = `BDT ${userData.totalEarnings.toFixed(2)}`;
+            document.getElementById('home-earnings-val').textContent = `Coin ${userData.totalEarnings.toFixed(2)}`;
             document.getElementById('home-ads-val').textContent = userData.adsWatched;
         }
 
@@ -3332,9 +3332,9 @@ let statusColor = (data.status === 'approved' || data.status === 'completed') ? 
 
         // Update NEW withdraw section
         if (document.getElementById('new-withdraw-balance-display')) {
-            document.getElementById('new-withdraw-balance-display').textContent = `BDT ${userData.balance.toFixed(2)}`;
-            document.getElementById('new-withdraw-total-earn').textContent = `BDT ${userData.totalEarnings.toFixed(2)}`;
-            document.getElementById('new-withdraw-total-out').textContent = `BDT ${userData.totalWithdrawn.toFixed(2)}`;
+            document.getElementById('new-withdraw-balance-display').textContent = `Coin ${userData.balance.toFixed(2)}`;
+            document.getElementById('new-withdraw-total-earn').textContent = `Coin ${userData.totalEarnings.toFixed(2)}`;
+            document.getElementById('new-withdraw-total-out').textContent = `Coin ${userData.totalWithdrawn.toFixed(2)}`;
         }
 
         // Update profile section
@@ -3343,11 +3343,11 @@ let statusColor = (data.status === 'approved' || data.status === 'completed') ? 
             document.getElementById('profileUsername').textContent = userData.username;
             document.getElementById('profileId').textContent = userData.id || "Not available";
             document.getElementById('profileSource').textContent = userData.source === 'telegram' ? 'Telegram' : 'Web';
-            document.getElementById('profileBalance').textContent = `BDT ${userData.balance.toFixed(2)}`;
-            document.getElementById('profileEarnings').textContent = `BDT ${userData.totalEarnings.toFixed(2)}`;
+            document.getElementById('profileBalance').textContent = `Coin ${userData.balance.toFixed(2)}`;
+            document.getElementById('profileEarnings').textContent = `Coin ${userData.totalEarnings.toFixed(2)}`;
             document.getElementById('profileAds').textContent = userData.adsWatched;
             document.getElementById('profileReferrals').textContent = userData.referrals || 0;
-            document.getElementById('profileWithdrawn').textContent = `BDT ${userData.totalWithdrawn.toFixed(2)}`;
+            document.getElementById('profileWithdrawn').textContent = `Coin ${userData.totalWithdrawn.toFixed(2)}`;
             
             // Format join date
             if (userData.joinDate) {
@@ -3684,7 +3684,7 @@ if (startEarningAd) {
 
                 await saveUserData();
                 updateUI();
-                showSuccessPopup(`Earned ${earnings.toFixed(2)} BDT!`);
+                showSuccessPopup(`Earned ${earnings.toFixed(2)} Coin!`);
             }).catch((result) => {
                 // Error / Skip
                 console.error('Ad result:', result);
