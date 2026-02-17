@@ -73,28 +73,31 @@
   justify-content: center;
 }
     /* ===================== UPDATED TOP BAR ANIMATIONS ===================== */
-    .fixed-top-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 6rem;
-      z-index: 1001;
-      background: #ffffff;
-      padding: 1rem;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-      border-radius: 0 0 1rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                  opacity 0.3s ease,
-                  visibility 0.4s ease;
-      transform: translateY(0);
-      opacity: 1;
-      visibility: visible;
-    }
-
+  .fixed-top-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  
+  /* UPDATED: 4.5rem is the perfect balance (approx 72px) */
+  height: 4.5rem; 
+  
+  z-index: 1001;
+  background: #ffffff;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  border-radius: 0 0 1rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  /* Smooth transition if you ever resize window */
+  transition: all 0.3s ease; 
+  
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
     /* Hide top bar for profile, withdraw, and history sections */
     body.header-hidden .fixed-top-header {
       transform: translateY(-100%);
@@ -105,21 +108,24 @@
     /* ===================== NEW PILL NAV STYLES ===================== */
 .fixed-bottom-nav {
   position: fixed;
-  bottom: 1rem; /* Lifts it up from the bottom */
+  bottom: 1rem;
   left: 50%;
-  transform: translateX(-50%); /* Centers it perfectly */
-  width: 90%; /* Width relative to screen */
-  max-width: 400px; /* Prevents it from getting too wide on desktop */
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 350px; /* Reduced width slightly for a sleeker look */
   height: auto;
-  z-index: 1000;
+  z-index: 2000;
   background: #ffffff;
-  padding: 0.5rem 0.5rem; /* Padding around the items */
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* Stronger, floating shadow */
-  border-radius: 9999px; /* Makes the bar perfectly round (Pill shape) */
+  
+  /* UPDATED: Reduced padding (was 0.5rem) */
+  padding: 0.25rem 0.25rem; 
+  
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease-in-out; /* Keeps your hide animation smooth */
+  transition: transform 0.3s ease-in-out;
 }
 
 .fixed-bottom-nav ul {
@@ -133,23 +139,24 @@
 
 .nav-item {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  color: #64748b; /* Gray for inactive items */
+  color: #64748b;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  font-size: 0.7rem; /* Slightly smaller text */
   font-weight: 500;
   
-  /* Crucial for the pill effect on the active item */
-  padding: 0.6rem 1.2rem; 
-  border-radius: 9999px; /* Rounds the individual item */
-  flex: 1; /* Ensures they share space equally */
-  margin: 0 2px; /* Tiny gap between items */
+  /* UPDATED: Reduced padding significantly (was 0.6rem 1.2rem) */
+  padding: 0.35rem 0.8rem; 
+  
+  border-radius: 9999px;
+  flex: 1;
+  margin: 0 2px;
 }
-
 .nav-item i {
-  font-size: 1.25rem;
+  /* UPDATED: Reduced icon size (was 1.25rem) */
+  font-size: 1.1rem; 
   margin-bottom: 2px;
   transition: transform 0.2s ease;
 }
@@ -173,16 +180,18 @@ body.header-hidden .fixed-bottom-nav {
 
     /* Adjust main content when header is hidden */
     main {
-      position: fixed;
-      top: 6rem;
-      bottom: 0; /* Let main go to bottom of screen */
-   /* Add internal padding so content clears the floating bar */
-      left: 0;
-      right: 0;
-      overflow: hidden;
-      padding: 1rem;
-      transition: top 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
+  position: fixed;
+  
+  /* UPDATED: Matches the new header height */
+  top: 4.5rem; 
+  
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  padding: 1rem;
+  transition: top 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
 
     body.header-hidden main {
   top: 0;
@@ -234,10 +243,15 @@ body.header-hidden .fixed-bottom-nav {
 }
 
     /* Adjust section-fullscreen when header is visible */
-    body:not(.header-hidden) .section-fullscreen {
-        top: -6rem !important;
-        height: calc(100% + 6rem);
-    }
+    /* Adjust section-fullscreen when header is visible */
+/* Adjust section-fullscreen when header is visible */
+body:not(.header-hidden) .section-fullscreen {
+    /* UPDATED: Negative value matches header height */
+    top: -4.5rem !important;
+    
+    /* UPDATED: Add height to compensate */
+    height: calc(100% + 4.5rem);
+}
 
     
 
@@ -277,26 +291,44 @@ body.header-hidden .fixed-bottom-nav {
       100% { transform: translateX(-100%); }
     }
 
-    #androidTopNotification {
-      position: fixed;
-      top: 7rem;
-      left: 50%;
-      transform: translateY(-100%) translateX(-50%);
-      width: 90%;
-      max-width: 28rem;
-      background: #1f2937;
-      color: white;
-      padding: 0.75rem 1rem;
-      border-radius: 1rem;
-      text-align: center;
-      z-index: 9999;
-      opacity: 0;
-      transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-    }
-    #androidTopNotification.show {
-      transform: translateY(0) translateX(-50%);
-      opacity: 1;
-    }
+   #androidTopNotification {
+  position: fixed;
+  /* UPDATED: Sits just below the new 4rem header */
+  top: 5rem; 
+  left: 50%;
+  
+  /* Centers it horizontally */
+  transform: translateX(-50%) translateY(-150%); 
+  
+  width: 90%;
+  max-width: 28rem; /* Keeps it looking like a phone notification */
+  
+  background: #1f2937; /* Dark Grey Background */
+  color: white;
+  padding: 0.75rem 1rem;
+  
+  border-radius: 1rem; /* Rounded corners like iOS/Android */
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  z-index: 9999; /* Ensures it is above everything else */
+  
+  opacity: 0;
+  pointer-events: none; /* Allows clicking through it when hidden */
+  
+  /* Smooth slide-in animation */
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              opacity 0.3s ease-out;
+}
+
+/* The Active State (When shown) */
+#androidTopNotification.show {
+  /* Slides down into view */
+  transform: translateX(-50%) translateY(0); 
+  opacity: 1;
+}
 
     #editModal {
       position: fixed;
